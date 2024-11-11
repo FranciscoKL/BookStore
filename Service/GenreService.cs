@@ -1,5 +1,6 @@
 ﻿using Bookstore.Data;
 using Bookstore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookstore.Service
 {
@@ -11,15 +12,20 @@ namespace Bookstore.Service
         {
             _context = context;
         }
-        public List<Genre> FindAll()
+        public async Task<List<Genre>> FindAllAsync()
         {
-            return _context.Genres.ToList();
+            return await _context.Genres.ToListAsync();
 
         }
-        public void Insert(Genre genre) 
+        public async Task InsertAsync(Genre genre) 
         {
             _context.Add(genre);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+        }
+        public async  Task DeleteAsync(Genre genre) 
+        {
+            _context.Remove(genre);
+            await _context.SaveChangesAsync();
         }
     }
 }

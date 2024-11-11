@@ -1,7 +1,9 @@
 ﻿using Bookstore.Data;
 using Bookstore.Models;
+using Bookstore.Models.ViewModels;
 using Bookstore.Service;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Bookstore.Controllers
 {
@@ -14,9 +16,9 @@ namespace Bookstore.Controllers
             _service = service;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {           
-            return View(_service.FindAll());
+            return View(await _service.FindAllAsync());
         }
         public IActionResult Create()
         {
@@ -24,15 +26,28 @@ namespace Bookstore.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Genre genre) 
+        public async Task<IActionResult> Create(Genre genre) 
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            _service.Insert(genre);
+            await _service.InsertAsync(genre);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        
+
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
         }
     }
 }
