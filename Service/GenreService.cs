@@ -1,6 +1,8 @@
 ﻿using Bookstore.Data;
 using Bookstore.Models;
+using Humanizer.Localisation;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Serialization;
 
 namespace Bookstore.Service
 {
@@ -22,10 +24,28 @@ namespace Bookstore.Service
             _context.Add(genre);
             await _context.SaveChangesAsync();
         }
-        public async  Task DeleteAsync(Genre genre) 
+        public async Task RemoveAsync(int id)
         {
-            _context.Remove(genre);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var obj = await _context.Genres.FindAsync(id);
+                _context.Genres.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                //throw new IntegrityException(ex.Message);
+            }
+
+
         }
-    }
+		public async Task<Genre> FindByIdAsync(int id)
+		{
+			return await _context.Genres.FindAsync(id);
+		}
+
+	}
+
+
+	
 }

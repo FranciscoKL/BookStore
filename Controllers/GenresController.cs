@@ -1,5 +1,4 @@
-﻿using Bookstore.Data;
-using Bookstore.Models;
+﻿using Bookstore.Models;
 using Bookstore.Models.ViewModels;
 using Bookstore.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +37,19 @@ namespace Bookstore.Controllers
         }
 
         
-
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id is null)
+            {
+                return RedirectToAction(nameof(Error), new {message = "Id nao fornecido"});
+            }
+            var obj = await _service.FindByIdAsync(id.Value);
+            if (obj is null) 
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+            }
+            return View(obj);
+        }
 
         public IActionResult Error(string message)
         {
