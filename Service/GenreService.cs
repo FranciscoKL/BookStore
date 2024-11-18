@@ -1,5 +1,6 @@
 ﻿using Bookstore.Data;
 using Bookstore.Models;
+using Bookstore.Service.Exceptions;
 using Humanizer.Localisation;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Serialization;
@@ -34,18 +35,34 @@ namespace Bookstore.Service
             }
             catch (DbUpdateException ex)
             {
-                //throw new IntegrityException(ex.Message);
+                throw new IntegrityException(ex.Message);
             }
-
-
         }
+
 		public async Task<Genre> FindByIdAsync(int id)
 		{
 			return await _context.Genres.FindAsync(id);
 		}
 
-	}
+		public async Task UpdateAsync(Genre genre)
+		{
+			bool hasAny = await _context.Genres.AnyAsync(x => x.Id == genre.Id);
+            if (!hasAny)
+            {
+                 throw new NotFoundException("Id não encontrado");
+            }
+            try
+            {
+                _context.Update(genre);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+				throw new DbConcurrecyException(ex.Message);
+            }
+		}
 
+	}
 
 	
 }
