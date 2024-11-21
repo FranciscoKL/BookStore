@@ -1,6 +1,7 @@
 ﻿using Bookstore.Models;
 using Bookstore.Models.ViewModels;
 using Bookstore.Service;
+using Bookstore.Service.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -50,8 +51,21 @@ namespace Bookstore.Controllers
             }
             return View(obj);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _service.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException ex)
+            {
+                return RedirectToAction(nameof(Error), new { message = ex.Message });
+            }
+        }
 
-    
 
         public IActionResult Error(string message)
         {
