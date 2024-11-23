@@ -27,12 +27,13 @@ namespace Bookstore.Models
         public Book() 
         {
         }
-        public Book(int id, string title, double price, string author) 
+        public Book(int id, string title, double price, string author, int releaseYear) 
         {
             Id = id;
             Title = title;
             Price = price;
             Author = author;
+            ReleaseYear = releaseYear;
         }
     }
 

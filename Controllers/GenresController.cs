@@ -66,16 +66,6 @@ namespace Bookstore.Controllers
             }
         }
 
-
-        public IActionResult Error(string message)
-        {
-            var viewModel = new ErrorViewModel
-            {
-                Message = message,
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            };
-            return View(viewModel);
-        }
         public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
@@ -113,5 +103,31 @@ namespace Bookstore.Controllers
             }
 
         }
+        public async Task<IActionResult> Details(int? id)
+        {
+           if (id is null) 
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });        
+            }
+
+            var obj = await _service.FindByIdEagerAsync(id.Value);
+            if (obj is null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "id não encontrado" });
+            }
+            return View(obj);
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
+        }
+
     }
+
 }

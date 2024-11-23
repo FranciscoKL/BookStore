@@ -61,6 +61,13 @@ namespace Bookstore.Service
 				throw new DbConcurrecyException(ex.Message);
             }
 		}
+        public async Task<Genre> FindByIdEagerAsync(int id)
+        {
+            return await _context
+                .Genres
+                .Include(x=> x.Books)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
 
 	}
 

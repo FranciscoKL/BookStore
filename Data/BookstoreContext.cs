@@ -8,9 +8,9 @@ namespace Bookstore.Data
         public BookstoreContext(DbContextOptions<BookstoreContext> options) : base(options)
         {
         }
-
         public DbSet<Genre> Genres { get; set; }
-
+        public DbSet<Book> Books { get; set; }
+       // public DbSet<Sale> Sale { get; set; }   
+      //  public DbSet<Seller> Seller { get; set; }
     }
 }
-;
