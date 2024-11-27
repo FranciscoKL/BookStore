@@ -138,9 +138,6 @@ namespace Bookstore.Controllers
             return View(obj);
         }
 
-        // POST: Books/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
   
 
 
