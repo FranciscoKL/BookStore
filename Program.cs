@@ -14,6 +14,7 @@ namespace Bookstore
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<GenreService>();
             builder.Services.AddScoped<SeedingService>();
+            builder.Services.AddScoped<BookService>();
             builder.Services.AddDbContext<BookstoreContext>(options =>
             {
                 options.UseMySql(
