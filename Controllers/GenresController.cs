@@ -4,23 +4,24 @@ using Bookstore.Service;
 using Bookstore.Service.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Bookstore.Controllers
 {
     public class GenresController : Controller
     {
-        private readonly GenreService _service;
+        private readonly GenreService _genreService;
 
         public GenresController(GenreService service)
         {
-            _service = service;
+            _genreService = service;
         }
 
         public async Task<IActionResult> Index()
         {           
-            return View(await _service.FindAllAsync());
+            return View(await _genreService.FindAllAsync());
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -32,7 +33,7 @@ namespace Bookstore.Controllers
             {
                 return View();
             }
-            await _service.InsertAsync(genre);
+            await _genreService.InsertAsync(genre);
 
             return RedirectToAction(nameof(Index));
         }
@@ -44,7 +45,7 @@ namespace Bookstore.Controllers
             {
                 return RedirectToAction(nameof(Error), new {message = "Id nao fornecido"});
             }
-            var obj = await _service.FindByIdAsync(id.Value);
+            var obj = await _genreService.FindByIdAsync(id.Value);
             if (obj is null) 
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
@@ -57,7 +58,7 @@ namespace Bookstore.Controllers
         {
             try
             {
-                await _service.RemoveAsync(id);
+                await _genreService.RemoveAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch (IntegrityException ex)
@@ -73,7 +74,7 @@ namespace Bookstore.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
 
-            var obj = await _service.FindByIdAsync(id.Value);
+            var obj = await _genreService.FindByIdAsync(id.Value);
             if (obj is null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
@@ -94,7 +95,7 @@ namespace Bookstore.Controllers
             }
             try
             {
-                await _service.UpdateAsync(genre);
+                await _genreService.UpdateAsync(genre);
                 return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException ex)
@@ -110,7 +111,7 @@ namespace Bookstore.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });        
             }
 
-            var obj = await _service.FindByIdEagerAsync(id.Value);
+            var obj = await _genreService.FindByIdEagerAsync(id.Value);
             if (obj is null)
             {
                 return RedirectToAction(nameof(Error), new { message = "id não encontrado" });

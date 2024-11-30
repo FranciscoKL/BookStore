@@ -9,8 +9,8 @@ namespace Bookstore.Models
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
         public string Title { get; set; }
         [Display(Name = "Valor")]
-        [DataType(DataType.Currency)]
-        [DisplayFormat(DataFormatString = "{0:c2}")]
+        
+        
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public double Price { get; set; }
         [Display(Name = "Autor")]
